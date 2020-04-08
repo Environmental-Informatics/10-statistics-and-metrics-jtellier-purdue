@@ -72,7 +72,6 @@ def CalcRBindex(Qvalues):
        (pathlength) by total discharge volumes for each year. The
        routine returns the RBindex value for the given data array."""
     a=0
-    Qvalues = Qvalues.dropna()
     if sum(Qvalues) > 0:
         for i in range(1,len(Qvalues)):
             a=a+abs(Qvalues[i-1]-Qvalues[i])
