@@ -89,10 +89,7 @@ def Calc7Q(Qvalues):
        picking the lowest average flow in any 7-day period during
        that year.  The routine returns the 7Q (7-day low flow) value
        for the given data array."""
-    if (Qvalues.isna().sum() >0):
-        val7Q = np.nan
-    else:
-        val7Q=min(Qvalues.resample('7D').mean())
+    val7Q=min(Qvalues.resample('7D').mean())
     return ( val7Q )
 
 def CalcExceed3TimesMedian(Qvalues):
@@ -151,7 +148,7 @@ def GetMonthlyAverages(MoDataDF):
     """This function calculates annual average monthly values for all 
     statistics and metrics.  The routine returns an array of mean values 
     for each metric in the original dataframe."""
-    colnames = ['site_no','Mean Flow','Coeff Variation','TQmean','R-B Index']
+    colnames = ['site_no','Mean Flow','Coeff Var','TQmean','R-B Index']
     MonthlyAverages = pd.DataFrame(0, index=[1,2,3,4,5,6,7,8,9,10,11,12],columns=colnames)
     MonthlyAverages.iloc[0,0]=MoDataDF['site_no'][::12].mean()
     MonthlyAverages.iloc[1,0]=MoDataDF['site_no'][::12].mean()
