@@ -108,13 +108,13 @@ def GetAnnualStatistics(DataDF):
     the given streamflow time series.  Values are retuned as a dataframe of
     annual values for each water year.  Water year, as defined by the USGS,
     starts on October 1."""
-    colnames = ['site_no','Mean Flow', 'Peak Flow','Median Flow','Coeff Var', 'Skew','Tqmean','R-B Index','7Q','3xMedian']
+    colnames = ['site_no','Mean Flow', 'Peak Flow','Median','Coeff Var', 'Skew','Tqmean','R-B Index','7Q','3xMedian']
     annualdata=DataDF.resample('AS-OCT').mean()
     WYDataDF = pd.DataFrame(0, index=annualdata.index,columns=colnames)
     WYDataDF['site_no']=DataDF.resample('AS-OCT')['site_no'].mean()
     WYDataDF['Mean Flow']=DataDF.resample('AS-OCT')['Discharge'].mean()
     WYDataDF['Peak Flow']=DataDF.resample('AS-OCT')['Discharge'].max()
-    WYDataDF['Median Flow']=DataDF.resample('AS-OCT')['Discharge'].median()
+    WYDataDF['Median']=DataDF.resample('AS-OCT')['Discharge'].median()
     WYDataDF['Coeff Var']=(DataDF.resample('AS-OCT')['Discharge'].std()/DataDF.resample('AS-OCT')['Discharge'].mean())*100
     WYDataDF['Skew']=DataDF.resample('AS-OCT').apply({'Discharge':lambda x: stats.skew(x,nan_policy='omit',bias=False)},raw=True)
     WYDataDF['Tqmean']=DataDF.resample('AS-OCT').apply({'Discharge':lambda x: CalcTqmean(x)})
