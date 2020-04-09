@@ -71,14 +71,16 @@ def CalcRBindex(Qvalues):
        values of day-to-day changes in daily discharge volumes
        (pathlength) by total discharge volumes for each year. The
        routine returns the RBindex value for the given data array."""
-    if (Qvalues.isna().sum() >0):   
-        RBindex = np.nan
-    else:
-        a=0
+    tester = len(Qvalues.dropna())
+    a=0
+    if (tester > 0):
+        Qvalues = Qvalues.dropna()
         for i in range(1,len(Qvalues)):
             a=a+abs(Qvalues[i-1]-Qvalues[i])
             
         RBindex=a/sum(Qvalues) 
+    else:
+        RBindex = np.nan
     return ( RBindex )
 
 def Calc7Q(Qvalues):
@@ -89,6 +91,7 @@ def Calc7Q(Qvalues):
        picking the lowest average flow in any 7-day period during
        that year.  The routine returns the 7Q (7-day low flow) value
        for the given data array."""
+    Qvalues=Qvalues.dropna()
     val7Q=min(Qvalues.resample('7D').mean())
     return ( val7Q )
 
