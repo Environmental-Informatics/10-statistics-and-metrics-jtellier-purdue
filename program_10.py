@@ -74,11 +74,11 @@ def CalcRBindex(Qvalues):
     tester = len(Qvalues.dropna())
     a=0
     if (tester > 0):
-        Qvalues = Qvalues.dropna()
-        for i in range(1,len(Qvalues)):
-            a=a+abs(Qvalues.iloc[i-1]-Qvalues.iloc[i])
+        place = Qvalues.dropna()
+        for i in range(1,len(place)):
+            a=a+abs(place.iloc[i-1]-place.iloc[i])
             
-        RBindex=a/sum(Qvalues) 
+        RBindex=a/sum(place) 
     else:
         RBindex = np.nan
     return ( RBindex )
@@ -92,7 +92,7 @@ def Calc7Q(Qvalues):
        that year.  The routine returns the 7Q (7-day low flow) value
        for the given data array."""
     Qvalues = Qvalues.dropna()
-    val7Q=(Qvalues.resample('7D').mean()).min()
+    val7Q=(Qvalues.rolling(7).mean()).min()
     return ( val7Q )
 
 def CalcExceed3TimesMedian(Qvalues):
