@@ -1,0 +1,21 @@
+	0	Station
+site_no	3335000.0	Wildcat
+Mean Flow	866.4724567258028	Wildcat
+Peak Flow	10387.4	Wildcat
+Median	429.08	Wildcat
+Coeff Var	148.8175921910175	Wildcat
+Skew	3.979348376044309	Wildcat
+TQmean	0.2626813384235347	Wildcat
+R-B Index	0.2711167902697777	Wildcat
+7Q	107.30571428571432	Wildcat
+3xMedian	63.36	Wildcat
+site_no	3331500.0	Tippe
+Mean Flow	955.7706391196949	Tippe
+Peak Flow	4896.0	Tippe
+Median	706.51	Tippe
+Coeff Var	82.96229088563904	Tippe
+Skew	1.9407244618431323	Tippe
+TQmean	0.3611403548169772	Tippe
+R-B Index	0.09038564674040646	Tippe
+7Q	220.09142857142854	Tippe
+3xMedian	35.14	Tippe
