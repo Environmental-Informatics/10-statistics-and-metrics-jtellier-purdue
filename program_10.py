@@ -119,10 +119,10 @@ def GetAnnualStatistics(DataDF):
     WYDataDF['Peak Flow']=DataDF.resample('AS-OCT')['Discharge'].max()
     WYDataDF['Median']=DataDF.resample('AS-OCT')['Discharge'].median()
     WYDataDF['Coeff Var']=(DataDF.resample('AS-OCT')['Discharge'].std()/DataDF.resample('AS-OCT')['Discharge'].mean())*100
-    WYDataDF['Skew']=DataDF.resample('AS-OCT').apply({'Discharge':lambda x: stats.skew(x,nan_policy='omit',bias=False)},raw=True)
+    WYDataDF['Skew']=DataDF['Discharge'].resample('AS-OCT').apply(stats.skew)
     WYDataDF['Tqmean']=DataDF.resample('AS-OCT').apply({'Discharge':lambda x: CalcTqmean(x)})
-    WYDataDF['R-B Index']=DataDF.resample('AS-OCT').apply({'Discharge':lambda x: CalcRBindex(x)})
-    WYDataDF['7Q']=DataDF.resample('AS-OCT').apply({'Discharge':lambda x: Calc7Q(x)})
+    WYDataDF['R-B Index']=DataDF['Discharge'].resample('AS-OCT').apply({lambda x: CalcRBindex(x)})
+    WYDataDF['7Q']=DataDF['Discharge'].resample('AS-OCT').apply({lambda x: Calc7Q(x)})
     WYDataDF['3xMedian']=DataDF.resample('AS-OCT').apply({'Discharge':lambda x: CalcExceed3TimesMedian(x)})
     return ( WYDataDF )
 
