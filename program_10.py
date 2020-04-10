@@ -76,7 +76,7 @@ def CalcRBindex(Qvalues):
     if (tester > 0):
         Qvalues = Qvalues.dropna()
         for i in range(1,len(Qvalues)):
-            a=a+abs(Qvalues[i-1]-Qvalues[i])
+            a=a+abs(Qvalues.iloc[i-1]-Qvalues.iloc[i])
             
         RBindex=a/sum(Qvalues) 
     else:
@@ -91,8 +91,8 @@ def Calc7Q(Qvalues):
        picking the lowest average flow in any 7-day period during
        that year.  The routine returns the 7Q (7-day low flow) value
        for the given data array."""
-    Qvalues=Qvalues.dropna()
-    val7Q=min(Qvalues.resample('7D').mean())
+    Qvalues = Qvalues.dropna()
+    val7Q=(Qvalues.resample('7D').mean()).min()
     return ( val7Q )
 
 def CalcExceed3TimesMedian(Qvalues):
