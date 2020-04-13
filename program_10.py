@@ -111,17 +111,17 @@ def GetAnnualStatistics(DataDF):
     the given streamflow time series.  Values are retuned as a dataframe of
     annual values for each water year.  Water year, as defined by the USGS,
     starts on October 1."""
-    colnames = ['site_no','Mean Flow', 'Peak Flow','Median','Coeff Var', 'Skew','TQmean','R-B Index','7Q','3xMedian']
+    colnames = ['site_no','Mean Flow', 'Peak Flow','Median Flow','Coeff Var', 'Skew','Tqmean','R-B Index','7Q','3xMedian']
     annualdata=DataDF.resample('AS-OCT').mean() #resampling annually starting at the start of october
     WYDataDF = pd.DataFrame(0, index=annualdata.index,columns=colnames) #create the empty dataframe
     #te next lines are the various parameters calculated over the sampling dates
     WYDataDF['site_no']=DataDF.resample('AS-OCT')['site_no'].mean()
     WYDataDF['Mean Flow']=DataDF.resample('AS-OCT')['Discharge'].mean()
     WYDataDF['Peak Flow']=DataDF.resample('AS-OCT')['Discharge'].max()
-    WYDataDF['Median']=DataDF.resample('AS-OCT')['Discharge'].median()
+    WYDataDF['Median Flow']=DataDF.resample('AS-OCT')['Discharge'].median()
     WYDataDF['Coeff Var']=(DataDF.resample('AS-OCT')['Discharge'].std()/DataDF.resample('AS-OCT')['Discharge'].mean())*100
     WYDataDF['Skew']=DataDF['Discharge'].resample('AS-OCT').apply(stats.skew)
-    WYDataDF['TQmean']=DataDF.resample('AS-OCT').apply({'Discharge':lambda x: CalcTqmean(x)}) #lambda apply necessary for custom functions
+    WYDataDF['Tqmean']=DataDF.resample('AS-OCT').apply({'Discharge':lambda x: CalcTqmean(x)}) #lambda apply necessary for custom functions
     WYDataDF['R-B Index']=DataDF['Discharge'].resample('AS-OCT').apply({lambda x: CalcRBindex(x)})
     WYDataDF['7Q']=DataDF['Discharge'].resample('AS-OCT').apply({lambda x: Calc7Q(x)})
     WYDataDF['3xMedian']=DataDF.resample('AS-OCT').apply({'Discharge':lambda x: CalcExceed3TimesMedian(x)})
@@ -131,13 +131,13 @@ def GetMonthlyStatistics(DataDF):
     """This function calculates monthly descriptive statistics and metrics 
     for the given streamflow time series.  Values are returned as a dataframe
     of monthly values for each year."""
-    colnames = ['site_no','Mean Flow','Coeff Var','TQmean','R-B Index']
+    colnames = ['site_no','Mean Flow','Coeff Var','Tqmean','R-B Index']
     monthdata=DataDF.resample('MS').mean()
     MoDataDF = pd.DataFrame(0, index=monthdata.index,columns=colnames)
     MoDataDF['site_no']=DataDF.resample('MS')['site_no'].mean()
     MoDataDF['Mean Flow']=DataDF.resample('MS')['Discharge'].mean()
     MoDataDF['Coeff Var']=(DataDF.resample('MS')['Discharge'].std()/DataDF.resample('MS')['Discharge'].mean())*100
-    MoDataDF['TQmean']=DataDF.resample('MS').apply({'Discharge':lambda x: CalcTqmean(x)})
+    MoDataDF['Tqmean']=DataDF.resample('MS').apply({'Discharge':lambda x: CalcTqmean(x)})
     MoDataDF['R-B Index']=DataDF.resample('MS').apply({'Discharge':lambda x: CalcRBindex(x)})
     return ( MoDataDF )
 
@@ -152,7 +152,7 @@ def GetMonthlyAverages(MoDataDF):
     """This function calculates annual average monthly values for all 
     statistics and metrics.  The routine returns an array of mean values 
     for each metric in the original dataframe."""
-    colnames = ['site_no','Mean Flow','Coeff Var','TQmean','R-B Index']
+    colnames = ['site_no','Mean Flow','Coeff Var','Tqmean','R-B Index']
     MonthlyAverages = pd.DataFrame(0, index=[1,2,3,4,5,6,7,8,9,10,11,12],columns=colnames) #create the empty dataframe
     MonthlyAverages.iloc[0,0]=MoDataDF['site_no'][::12].mean() #this gets messy, but essentially its taking the mean every 12 months (to keep the same month along all years)
     MonthlyAverages.iloc[1,0]=MoDataDF['site_no'][::12].mean()
@@ -193,18 +193,18 @@ def GetMonthlyAverages(MoDataDF):
     MonthlyAverages.iloc[10,2]=MoDataDF['Coeff Var'][1::12].mean()
     MonthlyAverages.iloc[11,2]=MoDataDF['Coeff Var'][2::12].mean()
     
-    MonthlyAverages.iloc[0,3]=MoDataDF['TQmean'][3::12].mean()
-    MonthlyAverages.iloc[1,3]=MoDataDF['TQmean'][4::12].mean()
-    MonthlyAverages.iloc[2,3]=MoDataDF['TQmean'][5::12].mean()
-    MonthlyAverages.iloc[3,3]=MoDataDF['TQmean'][6::12].mean()
-    MonthlyAverages.iloc[4,3]=MoDataDF['TQmean'][7::12].mean()
-    MonthlyAverages.iloc[5,3]=MoDataDF['TQmean'][8::12].mean()
-    MonthlyAverages.iloc[6,3]=MoDataDF['TQmean'][9::12].mean()
-    MonthlyAverages.iloc[7,3]=MoDataDF['TQmean'][10::12].mean()
-    MonthlyAverages.iloc[8,3]=MoDataDF['TQmean'][11::12].mean()
-    MonthlyAverages.iloc[9,3]=MoDataDF['TQmean'][::12].mean()
-    MonthlyAverages.iloc[10,3]=MoDataDF['TQmean'][1::12].mean()
-    MonthlyAverages.iloc[11,3]=MoDataDF['TQmean'][2::12].mean()
+    MonthlyAverages.iloc[0,3]=MoDataDF['Tqmean'][3::12].mean()
+    MonthlyAverages.iloc[1,3]=MoDataDF['Tqmean'][4::12].mean()
+    MonthlyAverages.iloc[2,3]=MoDataDF['Tqmean'][5::12].mean()
+    MonthlyAverages.iloc[3,3]=MoDataDF['Tqmean'][6::12].mean()
+    MonthlyAverages.iloc[4,3]=MoDataDF['Tqmean'][7::12].mean()
+    MonthlyAverages.iloc[5,3]=MoDataDF['Tqmean'][8::12].mean()
+    MonthlyAverages.iloc[6,3]=MoDataDF['Tqmean'][9::12].mean()
+    MonthlyAverages.iloc[7,3]=MoDataDF['Tqmean'][10::12].mean()
+    MonthlyAverages.iloc[8,3]=MoDataDF['Tqmean'][11::12].mean()
+    MonthlyAverages.iloc[9,3]=MoDataDF['Tqmean'][::12].mean()
+    MonthlyAverages.iloc[10,3]=MoDataDF['Tqmean'][1::12].mean()
+    MonthlyAverages.iloc[11,3]=MoDataDF['Tqmean'][2::12].mean()
     
     MonthlyAverages.iloc[0,4]=MoDataDF['R-B Index'][3::12].mean()
     MonthlyAverages.iloc[1,4]=MoDataDF['R-B Index'][4::12].mean()
