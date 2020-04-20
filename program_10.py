@@ -78,7 +78,7 @@ def CalcRBindex(Qvalues):
         for i in range(1,len(Qvalues.dropna())):
             a=a+abs(Qvalues.iloc[i-1]-Qvalues.iloc[i]) #and sequentially add the absolute different between daily discharge values
             
-        RBindex=a/sum(Qvalues.dropna()) #divide by dearly total discharge
+        RBindex=a/Qvalues.dropna().sum() #divide by dearly total discharge
     else:
         RBindex = np.nan #otherwise, report RBindex as nan
     return ( RBindex )
